@@ -32,9 +32,9 @@ contract CrowdFund{
     }
 
     function launch(uint _goal, uint32 _startAt, uint32 _endAt) external {
-        require(_startAt >= block.timestamp,"Start time is less than current Block Timestamp");
-        require(_endAt >= _startAt,"End time is less than Start time");
-        require(_endAt <= block.timestamp + 90 days, "End time exceeds the maximum Duration");
+        require(_startAt >= block.timestamp,"Start time  < Block Timestamp");
+        require(_endAt >= _startAt,"Endtime < start time");
+        require(_endAt <= block.timestamp + 90 days, "End time > 90 days");
 
          count += 1;
          campaigns[count] = Campaign({
@@ -50,8 +50,8 @@ contract CrowdFund{
 
     function cancel(uint _id) external {
         Campaign memory campaign = campaigns[_id];
-        require(msg.sender == campaign.creator, "You did not create this Campaign");
-        require(block.timestamp < campaign.startAt, "Campaign has already started");
+        require(msg.sender == campaign.creator, "You are not creator");
+        require(block.timestamp < campaign.startAt, "Already started");
 
         delete campaigns[_id];
         emit Cancel(_id);
